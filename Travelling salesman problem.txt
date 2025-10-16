@@ -1,0 +1,46 @@
+import itertools
+
+# Distance matrix (graph) for cities: A, B, C, D
+graph = [
+    [0, 10, 15, 20],   # A
+    [10, 0, 35, 25],   # B
+    [15, 35, 0, 30],   # C
+    [20, 25, 30, 0]    # D
+]
+
+# Mapping city numbers to names
+city_names = ['A', 'B', 'C', 'D']
+num_cities = len(graph)
+
+# Starting city (A = 0)
+start = 0
+cities = list(range(num_cities))
+
+# Store the best (minimum) cost and path(s)
+min_cost = float('inf')
+best_paths = []
+
+# Try all possible permutations of other cities (except starting city)
+for perm in itertools.permutations(cities[1:]):
+    path = [start] + list(perm) + [start]
+    cost = 0
+
+    # Calculate cost of current path
+    for i in range(len(path) - 1):
+        cost += graph[path[i]][path[i + 1]]
+
+    # Print the current path and cost
+    named_path = [city_names[i] for i in path]
+    print(f"Path: {' -> '.join(named_path)}, Cost: {cost}")
+
+    # Update best path(s)
+    if cost < min_cost:
+        min_cost = cost
+        best_paths = [named_path]
+    elif cost == min_cost:
+        best_paths.append(named_path)
+
+# Print the best (shortest) path(s)
+print("\n✅ Shortest Path(s):")
+for path in best_paths:
+    print(f"{' -> '.join(path)} with cost {min_cost}")
